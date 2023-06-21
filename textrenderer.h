@@ -293,14 +293,12 @@ void textCoordinates(char glyph) {
     }
 }
 
-inline static void textRenderer(const char* text, float x, float y, GLFWwindow* window, int fontSize, float r, float g, float b, originPos e){
+inline static void textRenderer(const char* text, float x, float y, GLFWwindow* window, int fontSize, float r, float g, float b, originPos e, Shader program){
     fontSize=fontSize;
 
     glDisable(GL_DEPTH_TEST);//disabling the depth buffer allows transparent pixels to be written overlapping the previous glyph without erasing it 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-
-    Shader program("2dtext.vert","2dtext.frag");
 
     program.use();
 
