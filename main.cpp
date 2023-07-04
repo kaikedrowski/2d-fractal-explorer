@@ -25,10 +25,10 @@ int screenWidth=960, screenHeight=540;
 /* ---------- */
 
 float vertices[] = {
-    0.5f,  0.5f, 0.0f,  // top right
-    0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+    1.0f,  1.0f, 0.0f,  // top right
+    1.0f, -1.0f, 0.0f,  // bottom right
+    -1.0f, -1.0f, 0.0f,  // bottom left
+    -1.0f,  1.0f, 0.0f   // top left 
 };
 unsigned int indices[] = {  // note that we start from 0!
     0, 1, 3,  // first Triangle
@@ -61,22 +61,31 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+
+    glfwGetWindowSize(window,&screenWidth,&screenHeight);
 }
 
 void rendertext(GLFWwindow* window, Shader program){
     if(guitext){
         std::string fpstring="FPS "+std::to_string(fps).substr(0,4);
+        char zm[16];
+        sprintf(zm,"%.0f",zoom);
+        std::string zmstr="Zoom: ";
+        zmstr+=zm;
+        std::string coordstring=std::to_string(posx)+", "+std::to_string(posy);
         textRenderer(fpstring.c_str(),32.0,-32.0,window,32,1.0,1.0,1.0,topLeft,program);
+        textRenderer(zmstr.c_str(),32.0,-96.0,window,32,1.0,1.0,1.0,topLeft,program);
+        textRenderer(coordstring.c_str(),32.0,-160.0,window,32,1.0,1.0,1.0,topLeft,program);
     }
 }
+
+GLFWwindow* window;
 
 int main(void)
 {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
     Logger("Program Initialized");
-
-    GLFWwindow* window;
 
     glfwSetErrorCallback(error_callback);
  
@@ -199,7 +208,12 @@ int main(void)
 
 void renderScene(const Shader &shader){
     shader.use();
+    shader.setVec2("screensize",screenWidth,screenHeight);
+    shader.setVec2("coords",posx,posy);
+    shader.setFloat("zoom",zoom);
+    shader.setFloat("itr",128);
+
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0,6);
+    //glDrawArrays(GL_TRIANGLES, 0,6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

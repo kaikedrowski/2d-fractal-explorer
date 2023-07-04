@@ -6,10 +6,13 @@
 
 #include "utils.h"
 
+float zoom=1.0;
+float posx=0.0;
+float posy=0.0;
+
 bool firstMouse = true;
 float lastX =  800.0f / 2.0;
 float lastY =  600.0 / 2.0;
-float fov   =  45.0f;
 
 bool key_forward=false;//w
 bool key_left=false;//a
@@ -70,6 +73,12 @@ static inline void keycallback(GLFWwindow* window, int key, int scancode, int ac
 }
 
 static inline void keyActions() {
+    if(key_forward)zoom*=1.1;
+    if(key_back)zoom*=.9;
+    if(key_left)posx-=0.1/(zoom);
+    if(key_right)posx+=0.1/(zoom);
+    if(key_up)posy+=0.1/(zoom);
+    if(key_down)posy-=0.1/(zoom);
 }
 
 static inline void cursorpositioncallback(GLFWwindow* window, double xposIn, double yposIn){
