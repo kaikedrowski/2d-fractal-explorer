@@ -209,8 +209,8 @@ int main(void)
 void renderScene(const Shader &shader){
     shader.use();
     shader.setVec2("screensize",screenWidth,screenHeight);
-    shader.setVec2("coords",posx,posy);
-    shader.setFloat("zoom",zoom);
+    shader.setDVec2("coords",posx,posy);
+    shader.setDouble("zoom",zoom);
     shader.setFloat("itr",128);
 
     glBindVertexArray(VAO);
