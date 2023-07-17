@@ -21,7 +21,6 @@
 //config
 bool guitext = true;
 int screenWidth=960, screenHeight=540;
-
 /* ---------- */
 
 float vertices[] = {
@@ -130,7 +129,7 @@ int main(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
 
-    Shader mainShader("main.vert","main.frag");
+    Shader mainShader("main.vert","julia.frag");
     Shader textShader("2dtext.vert","2dtext.frag");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -212,6 +211,7 @@ void renderScene(const Shader &shader){
     shader.setDVec2("coords",posx,posy);
     shader.setDouble("zoom",zoom);
     shader.setFloat("itr",128);
+    shader.setFloat("angle",angle);
 
     glBindVertexArray(VAO);
     //glDrawArrays(GL_TRIANGLES, 0,6);

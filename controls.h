@@ -9,6 +9,7 @@
 double zoom=1.0;
 double posx=0.0;
 double posy=0.0;
+float angle=0.0;
 
 bool firstMouse = true;
 float lastX =  800.0f / 2.0;
@@ -20,6 +21,8 @@ bool key_back=false;//s
 bool key_right=false;//d
 bool key_up=false;//space
 bool key_down=false;//lshift
+bool key_angle_inc;//right arrow
+bool key_angle_dec;//left arrow
 
 enum camera_mode {camera_mode_fps, camera_mode_three_dimensional};
 
@@ -46,6 +49,12 @@ static inline void keycallback(GLFWwindow* window, int key, int scancode, int ac
             case GLFW_KEY_LEFT_SHIFT:
                 key_down=true;
                 break;
+            case GLFW_KEY_RIGHT:
+                key_angle_inc=true;
+                break;
+            case GLFW_KEY_LEFT:
+                key_angle_dec=true;
+                break;
             case GLFW_KEY_ESCAPE:
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
@@ -69,6 +78,12 @@ static inline void keycallback(GLFWwindow* window, int key, int scancode, int ac
             case GLFW_KEY_LEFT_SHIFT:
                 key_down=false;
                 break;
+            case GLFW_KEY_RIGHT:
+                key_angle_inc=false;
+                break;
+            case GLFW_KEY_LEFT:
+                key_angle_dec=false;
+                break;
         }
 }
 
@@ -79,6 +94,8 @@ static inline void keyActions() {
     if(key_right)posx+=0.1/zoom;
     if(key_up)posy+=0.1/zoom;
     if(key_down)posy-=0.1/zoom;
+    if(key_angle_inc)angle+=0.001;
+    if(key_angle_dec)angle-=0.001;
 }
 
 static inline void cursorpositioncallback(GLFWwindow* window, double xposIn, double yposIn){

@@ -5,6 +5,7 @@ uniform vec2 screensize;
 uniform dvec2 coords;
 uniform double zoom;
 uniform float itr;
+uniform float angle;
 
 #define PI 3.14159265358979
 
@@ -12,16 +13,18 @@ dvec3 color(float s)
 {
     double v=1.0-cos(PI*s)*cos(PI*s);
     return dvec3(v*1.0,v*2.0,v*5.0);
+    //return dvec3(0.5-cos(s*75.0)/2.0,0.5-cos(s* 120.0)/2.0,0.5-cos(s*165.0)/2.0);
 }
 
-dvec3 mandelbrot(dvec2 uv)
+dvec3 julia(dvec2 uv)
 {
-    dvec2 c=5.0*uv-dvec2(0.7,0.0);
+    float R=2.0;
+    dvec2 c=uv*5;
     c/=zoom;
     c+=coords;
-    dvec2 z=dvec2(0.0);
+    dvec2 z=dvec2(c);
     for(float i;i<itr;i++){
-        z=dvec2(z.x*z.x-z.y*z.y,2.0*z.x*z.y)+c;
+        z=dvec2((z.x*z.x-z.y*z.y)+(0.7885 * cos(angle)), (2.0*z.x*z.y)-(sin(angle)))+c;
         if(dot(z,z)>4.0)return color(i/itr);
     }
     
@@ -32,7 +35,7 @@ void main()
 {
     dvec2 uv=(gl_FragCoord.xy-0.5*screensize.xy)/screensize.y;
     dvec3 col=dvec3(0.0);
-    dvec3 m=mandelbrot(uv);
-    col+=m;
+    dvec3 j=julia(uv);
+    col+=j;
     FragColor=vec4(col,1.0);
 }
